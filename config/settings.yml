@@ -1,0 +1,4 @@
+plugins:
+  code_bytes_enabled:
+    default: true
+    client: true
