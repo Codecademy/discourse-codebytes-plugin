@@ -19,10 +19,9 @@
     ### There are two ways of doing this. Choose one.
     **Method One** - Run the Discourse bootsrap [script](https://github.com/techAPJ/install-rails/blob/master/mac).  
     
-    1. 
-        ```sh
-        bash <(curl -s https://raw.githubusercontent.com/techAPJ/install-rails/master/mac)
-        ```
+     ```sh
+     bash <(curl -s https://raw.githubusercontent.com/techAPJ/install-rails/master/mac)
+     ```
     **Note**: Some versions of macOS (like Big Sur 11.1) may lead to difficulties.  
     For Homebrew related errors, try:
     ```sh
@@ -61,10 +60,12 @@
    All the tests should pass.
 
 1. **Symlink the CodeBytes plug-in to the Discourse app**
-   cd your/dev/path/folder
-   cd discourse
-   cd plugins
-   ln -s path/to/discourse-code-bytes-plugin
+    ```sh
+    cd your/dev/path/folder
+    cd discourse
+    cd plugins
+    ln -s path/to/discourse-code-bytes-plugin
+    ```
 
 1. **Create an admin user**
    To create a new admin, run the following command:
