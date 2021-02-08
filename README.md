@@ -79,9 +79,9 @@
     ```
     You should now be able to run Discourse at http://localhost:3000/. Log-in with your admin account.
     
-1. **Create a new post or comment, to see the CodeBytes plugin in the editor toolbar.
+1. **Create a new post or comment, to see the CodeBytes plugin in the editor toolbar.**
    <img src="https://p82.f1.n0.cdn.getcloudapp.com/items/7Kup0jBo/4ac9701b-6706-445c-b517-b55e467bc49f.gif?source=viewer&v=1e220bfb98758fd5b9e186efa21545bc" height="500"/>
    <img src="https://p82.f1.n0.cdn.getcloudapp.com/items/L1uN76xk/cfddaf1a-e509-4cdc-9633-ada88c733612.png?source=viewer&v=e4ab7fec67566d30fcffa703af3045ee" height="500"/>
 
-You can now open the CodeBytes repo in your editor, and create a feature branch!
+### You can now open the CodeBytes repo in your editor, and create a feature branch!
    
