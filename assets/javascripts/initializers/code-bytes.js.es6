@@ -18,6 +18,18 @@ function initializeCodeByte(api) {
       },
     },
   });
+
+  api.decorateCookedElement((elem) => {
+    const codebyteDivs = elem.querySelectorAll("div.d-codebyte");
+    codebyteDivs.forEach((div) => {
+      // TODO: Replace with iFrame or other node
+      // Content might flash, that's ok.
+      // TODO: Check allow list for markdown parser Option B of doing it the Markdown
+      // TODO: Plan C: Communicate with a specific iFrame node.
+      // TODO: Plan D: Don't use iFrame, but attach a React component.
+      div.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+    });
+  });
 }
 
 export default {
@@ -25,5 +37,5 @@ export default {
 
   initialize() {
     withPluginApi("0.8.31", initializeCodeByte);
-  }
+  },
 };
