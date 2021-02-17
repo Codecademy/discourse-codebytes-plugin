@@ -27,7 +27,7 @@ function initializeCodeByte(api) {
       // TODO: Check allow list for markdown parser Option B of doing it the Markdown
       // TODO: Plan C: Communicate with a specific iFrame node.
       // TODO: Plan D: Don't use iFrame, but attach a React component.
-      div.innerHTML = `<iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
+      div.innerHTML = `<iframe width="560" height="800" src="https://tengu.codecademy.com/student-center" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>`;
     });
   });
 }
