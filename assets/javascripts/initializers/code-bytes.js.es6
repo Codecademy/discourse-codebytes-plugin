@@ -7,16 +7,46 @@ function initializeCodeByte(api) {
       id: "codebyte",
       group: "insertions",
       icon: "far-copyright",
-      action: () => toolbar.context.send("insertCodeByte"),
+      action: () => toolbar.context.send("insertCodeByte", "test"),
     });
+
+    window.updateCodeByte = function(footext) {
+      toolbar.context.send("updateCodeByte", footext);
+    };
+
+    if (window.addEventListener) {
+      window.addEventListener("message", onMessage, false);        
+    } 
+    else if (window.attachEvent) {
+        window.attachEvent("onmessage", onMessage, false);
+    }
+    
+    function onMessage(event) {
+        // Check sender origin to be trusted
+        // if (event.origin !== "http://example.com") return;
+        window.updateCodeByte(event.data);
+    }
+
   });
 
   api.modifyClass("component:d-editor", {
     actions: {
-      insertCodeByte() {
-        this._insertText('[codebyte]\nprint("Hello, world!")\n[/codebyte]');
+      insertCodeByte(text) {
+        this._insertText('[codebyte]\n' + text + '\n[/codebyte]');
+      },
+      updateCodeByte(text) {
+        this.set("value", '[codebyte]\n' + text + '\n[/codebyte]');
       },
     },
+  });
+
+  api.decorateCookedElement((elem) => {
+    const codebyteDivs = elem.querySelectorAll("div.d-codebyte");
+    codebyteDivs.forEach((div) => {
+      const snippet = div.innerText;
+      div.innerHTML = `<iframe width="600" height="280" src="http://localhost:8000/codebyte-editor?code=${encodeURIComponent(snippet)}" ></iframe>`;
+    });
+
   });
 }
 
