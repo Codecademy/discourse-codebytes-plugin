@@ -2,7 +2,12 @@
   CodeBytes Discourse Plug In
 </h1>
 
-## 🚀 Setup Guide
+[Setup Guide](#setup-guide)
+
+
+[Discourse Docs](#discourse-docs)
+
+## Setup Guide
 
 1. **Update Homebrew and its packages**  
    Before you start, update homebrew and its packages to make sure the following steps all run smoothly.
@@ -118,3 +123,35 @@
    <img src="https://p82.f1.n0.cdn.getcloudapp.com/items/L1uN76xk/cfddaf1a-e509-4cdc-9633-ada88c733612.png?source=viewer&v=e4ab7fec67566d30fcffa703af3045ee" height="500"/>
 
 ### You can now open the CodeBytes repo in your editor, and create a feature branch!
+
+
+
+
+
+
+
+
+
+## Discourse Docs
+
+#### Best practices and recommendations while building the plugin:
+- Disable, or have a clear way of disabling usage analytics
+- Watch out for N+1 entries for performance!
+- Where possible, prefer to extend functionality rather than override. This allows the functionality to be better compatible with future upgrades and other plugins.
+- Where possible, use background jobs and prefer nonblocking calls to keep UI responsive.
+
+### How-to series for creating Discourse plugins:
+- [Beginner's Guide to Creating Discourse Plugins - Part 1](https://meta.discourse.org/t/beginners-guide-to-creating-discourse-plugins-part-1/30515)
+- [Beginner's Guide to Creating Discourse Plugins Part 2: Plugin Outlets](https://meta.discourse.org/t/beginners-guide-to-creating-discourse-plugins-part-2-plugin-outlets/31001)
+- [Beginner's Guide to Creating Discourse Plugins Part 3: Custom Settings](https://meta.discourse.org/t/beginners-guide-to-creating-discourse-plugins-part-3-custom-settings/31115)
+- [Beginner's Guide to Creating Discourse Plugins Part 4: Git Setup](https://meta.discourse.org/t/beginners-guide-to-creating-discourse-plugins-part-4-git-setup/31272)
+- [Beginner's Guide to Creating Discourse Plugins Part 5: Admin Interfaces](https://meta.discourse.org/t/beginners-guide-to-creating-discourse-plugins-part-5-admin-interfaces/31761)
+- [Beginner’s Guide to Creating Discourse Plugins Part 6: Acceptance Tests](https://meta.discourse.org/t/beginner-s-guide-to-creating-discourse-plugins-part-6-acceptance-tests/32619)
+- [Beginner’s Guide to Creating Discourse Plugins Part 7: Publish your plugin](https://meta.discourse.org/t/beginner-s-guide-to-creating-discourse-plugins-part-7-publish-your-plugin/101636)
+
+As for existing plugins and sample, here are a few you can start out with
+- Plugins for updating composer or render specific syntax here:
+  - [GitHub - discourse/discourse-checklist: A simple checklist rendering plugin for discourse](https://github.com/discourse/discourse-checklist)
+  - [GitHub - discourse/discourse-spoiler-alert: A plugin for discourse to hide spoilers behind the spoiler-alert jQuery plugin](https://github.com/discourse/discourse-spoiler-alert)
+- Plugins that queue and run job examples:
+  - [GitHub - discourse/discourse-akismet: give spam a whoopin](https://github.com/discourse/discourse-akismet)
