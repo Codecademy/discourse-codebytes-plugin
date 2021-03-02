@@ -1,0 +1,21 @@
+  
+<!---
+READ THIS: Please review the Pre-Review Checklist before seeking review! https://www.notion.so/codecademy/Development-Process-0e566d88c7734561b63f45313a9c40bd
+-->
+
+## Overview
+Brief description of what this PR does and why it is needed.
+
+### PR Checklist
+- [ ] Related to JIRA ticket: ABC-123
+- [ ] I have run this code to verify it works
+- [ ] This PR includes [client](https://www.notion.so/codecademy/Frontend-Unit-Tests-1cbf4e078a6647559b4583dfb6d3cb18), [server](https://www.notion.so/codecademy/Ruby-Unit-Tests-6f0353926a034df4909142e4fe686bf7), and/or [end to end](https://www.notion.so/codecademy/Frontend-Acceptance-Tests-cb1125a99a6c4d478a85979aa46cad03) tests for the code change
+
+### Notes
+Optional. Screenshots, alternative strategies that didn't work out, witty puns, anything else the reviewer should know.
+
+### Testing Instructions
+1. Visit https://STAGING.codecademy.com <!--- staging server this feature branch is deployed on -->
+2. What other steps are required?
+3. ...
+4. Profit!
