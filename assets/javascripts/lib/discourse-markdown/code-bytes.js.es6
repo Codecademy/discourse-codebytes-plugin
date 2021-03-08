@@ -31,16 +31,16 @@ function applyDataAttributes(token, state, attributes) {
 const blockRule = {
   tag: "codebyte",
 
-  before(state, tagInfo) {
+  replace(state, info, content) {
     let token = state.push("codebyte_open", "div", 1);
     token.attrs = [["class", CODEBYTE_CLASS]];
-
-    applyDataAttributes(token, state, parseAttributes(tagInfo));
-  },
-
-  after(state) {
+    // debugger;
+    token = state.push('text', "", 0)
+    token.content = content
     state.push("codebyte_close", "div", -1);
-  },
+    return true;
+  }
+
 };
 
 const inlineRule = {
