@@ -44,7 +44,7 @@ function initializeCodeByte(api) {
     const codebyteDivs = elem.querySelectorAll("div.d-codebyte");
     codebyteDivs.forEach((div) => {
       const snippet = div.textContent.trim();
-      div.innerHTML = `<iframe width="600" height="280" src="http://localhost:8000/codebyte-editor?code=${encodeURIComponent(snippet)}" ></iframe>`;
+      div.innerHTML = `<iframe width="600" height="460" style="border: 0;" src="http://localhost:8000/codebyte-editor?code=${encodeURIComponent(snippet)}" ></iframe>`;
     });
 
   });
