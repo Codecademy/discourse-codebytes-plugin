@@ -43,7 +43,7 @@ function initializeCodeByte(api) {
   api.decorateCookedElement((elem) => {
     const codebyteDivs = elem.querySelectorAll("div.d-codebyte");
     codebyteDivs.forEach((div) => {
-      const snippet = div.innerText;
+      const snippet = div.textContent.trim();
       div.innerHTML = `<iframe width="600" height="280" src="http://localhost:8000/codebyte-editor?code=${encodeURIComponent(snippet)}" ></iframe>`;
     });
 
