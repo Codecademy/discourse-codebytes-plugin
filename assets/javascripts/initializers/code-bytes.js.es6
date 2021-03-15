@@ -40,13 +40,43 @@ function initializeCodeByte(api) {
     },
   });
 
-  api.decorateCookedElement((elem) => {
-    const codebyteDivs = elem.querySelectorAll("div.d-codebyte");
-    codebyteDivs.forEach((div) => {
-      const snippet = div.textContent.trim();
-      div.innerHTML = `<iframe width="600" height="460" style="border: 0;" src="http://localhost:8000/codebyte-editor?code=${encodeURIComponent(snippet)}" ></iframe>`;
+  function renderCodebyteFrame(params = {}) {
+    const frame = document.createElement('iframe');
+
+    const urlParams = Object.keys(params).reduce((acc, key, i) => (
+      `${acc}${i === 0 ? '?' : '&'}${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
+    ), '');
+
+    frame.src = `http://localhost:8000/codebyte-editor${urlParams}`;
+
+    Object.assign(frame.style, {
+      display: 'block',
+      height: '400px',
+      width: '100%',
+      maxWidth: '712px',
+      border: 0,
     });
 
+    return frame;
+  }
+
+  api.decorateCookedElement((elem) => {
+    elem.querySelectorAll("div.d-codebyte").forEach((div) => {
+      const codebyteFrame = renderCodebyteFrame({
+        code: div.textContent.trim()
+      });
+      div.innerHTML = '';
+      div.appendChild(codebyteFrame);
+
+      if (elem.classList.contains('d-editor-preview')) {
+        const saveButton = document.createElement('button');
+        saveButton.className = 'btn-primary';
+        saveButton.textContent = 'Save to post';
+        saveButton.style.marginTop = '24px';
+        saveButton.onclick = () => codebyteFrame.contentWindow.postMessage(null, '*');
+        div.appendChild(saveButton);
+      }
+    });
   });
 }
 
