@@ -11,23 +11,12 @@ function initializeCodeByte(api) {
       action: () => toolbar.context.send("insertCodeByte", "test"),
     });
 
-    window.updateCodeByte = function(footext) {
-      toolbar.context.send("updateCodeByte", footext);
+    const onSaveResponse = (message) => {
+      if (message.data.codeBytesSaveResponse)
+        toolbar.context.send("updateCodeByte", message.data.codeBytesSaveResponse);
     };
 
-    if (window.addEventListener) {
-      window.addEventListener("message", onMessage, false);
-    } 
-    else if (window.attachEvent) {
-      window.attachEvent("onmessage", onMessage, false);
-    }
-
-    function onMessage(event) {
-      // Check sender origin to be trusted
-      // if (event.origin !== "http://example.com") return;
-      window.updateCodeByte(event.data);
-    }
-
+    window.addEventListener("message", onSaveResponse, false);
   });
 
   api.modifyClass("component:d-editor", {
@@ -71,7 +60,7 @@ function initializeCodeByte(api) {
         saveButton.className = 'btn-primary';
         saveButton.textContent = 'Save to post';
         saveButton.style.marginTop = '24px';
-        saveButton.onclick = () => codebyteFrame.contentWindow.postMessage(null, '*');
+        saveButton.onclick = () => codebyteFrame.contentWindow.postMessage({codeBytesSaveRequested: true}, '*');
         div.appendChild(saveButton);
       }
     });
