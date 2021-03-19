@@ -1,4 +1,5 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
+import loadScript from "discourse/lib/load-script";
 
 function initializeCodeByte(api) {
   api.onToolbarCreate((toolbar) => {
@@ -32,11 +33,8 @@ function initializeCodeByte(api) {
   function renderCodebyteFrame(params = {}) {
     const frame = document.createElement('iframe');
 
-    const urlParams = Object.keys(params).reduce((acc, key, i) => (
-      `${acc}${i === 0 ? '?' : '&'}${encodeURIComponent(key)}=${encodeURIComponent(params[key])}`
-    ), '');
-
-    frame.src = `http://localhost:8000/codebyte-editor${urlParams}`;
+    const encodedURI = Base64.encodeURI(params.code);
+    frame.src = `http://localhost:8000/codebyte-editor?code=${encodedURI}`;
 
     Object.assign(frame.style, {
       display: 'block',
@@ -73,6 +71,12 @@ export default {
   name: "code-bytes",
 
   initialize() {
-    withPluginApi("0.8.31", initializeCodeByte);
-  }
+    withPluginApi("0.8.31", (api) => {
+      loadScript(
+        "https://cdn.jsdelivr.net/npm/js-base64@3.6.0/base64.min.js"
+      ).then(() => {
+        return initializeCodeByte(api);
+      });
+    });
+  },
 };
