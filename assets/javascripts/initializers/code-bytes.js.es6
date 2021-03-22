@@ -12,8 +12,9 @@ function initializeCodeByte(api) {
     });
 
     const onSaveResponse = (message) => {
-      if (message.data.codeBytesSaveResponse)
+      if (message.data.codeBytesSaveResponse) {
         toolbar.context.send("updateCodeByte", message.data.codeBytesSaveResponse);
+      }
     };
 
     window.addEventListener("message", onSaveResponse, false);
@@ -24,17 +25,17 @@ function initializeCodeByte(api) {
       insertCodeByte(text) {
         this._insertText('[codebyte]\n' + text + '\n[/codebyte]');
       },
-      updateCodeByte(text) {
-        this.set("value", '[codebyte]\n' + text + '\n[/codebyte]');
+      updateCodeByte({ code, language }) {
+        this.set('value', `[codebyte${language ? ` language=${language}` : ''}]\n${code}\n[/codebyte]`);
       },
     },
   });
 
-  function renderCodebyteFrame(params = {}) {
+  function renderCodebyteFrame(language = '', code = '') {
     const frame = document.createElement('iframe');
 
-    const encodedURI = Base64.encodeURI(params.code);
-    frame.src = `http://localhost:8000/codebyte-editor?code=${encodedURI}`;
+    const encodedURI = Base64.encodeURI(code);
+    frame.src = `http://localhost:8000/codebyte-editor?lang=${language}&code=${encodedURI}`;
 
     Object.assign(frame.style, {
       display: 'block',
@@ -49,9 +50,7 @@ function initializeCodeByte(api) {
 
   api.decorateCookedElement((elem) => {
     elem.querySelectorAll("div.d-codebyte").forEach((div) => {
-      const codebyteFrame = renderCodebyteFrame({
-        code: div.textContent.trim()
-      });
+      const codebyteFrame = renderCodebyteFrame(div.dataset.language, div.textContent.trim());
       div.innerHTML = '';
       div.appendChild(codebyteFrame);
 
