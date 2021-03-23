@@ -28,14 +28,21 @@ function initializeCodeByte(api) {
         const exampleFormat = '[codebyte]\nhello world\n[/codebyte]'
         const lineValueSelection = this._getSelected("", {lineVal:true})
         const selection = this._getSelected()
-        const addBlockInNewLine = lineValueSelection.lineVal.length === 0
+        const addBlockInline = lineValueSelection.lineVal.length === 0
         const isTextSelected = selection.value.length > 0
         if(isTextSelected){
-          this.set('value',`${selection.pre}[codebyte]\n${selection.value}\n[/codebyte]${selection.post}`)
+          console.log(lineValueSelection, selection)
+          if(addBlockInline || 
+            lineValueSelection.lineVal === lineValueSelection.value || 
+            lineValueSelection.pre.trim() === ""){
+            this.set('value',`${selection.pre}[codebyte]\n${selection.value}\n[/codebyte]${selection.post}`)
+          } else {
+            this.set('value',`${selection.pre}\n[codebyte]\n${selection.value}\n[/codebyte]${selection.post}`)
+          }
           return 
         }
         else {
-          if(addBlockInNewLine){
+          if(addBlockInline){
             this._insertText(exampleFormat)
           } else {
             this._insertText(`\n${exampleFormat}`)
