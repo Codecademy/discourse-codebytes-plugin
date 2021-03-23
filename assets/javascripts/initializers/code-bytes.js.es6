@@ -12,7 +12,9 @@ function initializeCodeByte(api) {
     });
 
     const onSaveResponse = (message) => {
-      if (message.data.codeBytesSaveResponse) {
+      if (toolbar.context.isDestroyed || toolbar.context.isDestroying) {
+        window.removeEventListener("message", onSaveResponse);
+      } else if (message.data.codeBytesSaveResponse) {
         toolbar.context.send("updateCodeByte", message.data.codeBytesSaveResponse);
       }
     };
