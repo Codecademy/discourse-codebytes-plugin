@@ -8,11 +8,12 @@ function initializeCodeByte(api) {
       id: "codebyte",
       group: "insertions",
       icon: "far-copyright",
-      action: () => toolbar.context.send("insertCodeByte", "test"),
+      action: () => toolbar.context.send("insertCodeByte")
     });
 
     const onSaveResponse = (message) => {
       if (message.data.codeBytesSaveResponse)
+      console.log(message)
         toolbar.context.send("updateCodeByte", message.data.codeBytesSaveResponse);
     };
 
@@ -21,11 +22,36 @@ function initializeCodeByte(api) {
 
   api.modifyClass("component:d-editor", {
     actions: {
-      insertCodeByte(text) {
-        this._insertText('[codebyte]\n' + text + '\n[/codebyte]');
+      insertCodeByte() {
+        const exampleFormat = '[codebyte]\nhello world\n[/codebyte]'
+        const lineValueSelection = this._getSelected("", {lineVal:true})
+        const selection = this._getSelected()
+        const addBlockInNewLine = lineValueSelection.lineVal.length === 0
+        const isTextSelected = selection.value.length > 0
+        if(isTextSelected){
+          this.set('value',`${selection.pre}[codebyte]\n${selection.value}\n[/codebyte]${selection.post}`)
+          return 
+        }
+        else {
+          if(addBlockInNewLine){
+            this._insertText(exampleFormat)
+          } else {
+            this._insertText(`\n${exampleFormat}`)
+          }
+          return
+        }
       },
       updateCodeByte(text) {
-        this.set("value", '[codebyte]\n' + text + '\n[/codebyte]');
+        const startTag = '[codebyte]'
+        const endTag = '[/codebyte]'
+        const editorValue = this.get('value')
+        const startTagPos = editorValue.indexOf(startTag)
+        const endTagPos = editorValue.indexOf(endTag)
+        const preValue = editorValue.slice(0,startTagPos)
+        const postValue = editorValue.slice(endTagPos+endTag.length)
+        const codeBlock = `${startTag}\n${text}\n${endTag}`
+        this.set('value', `${preValue}${codeBlock}${postValue}`)
+        
       },
     },
   });
