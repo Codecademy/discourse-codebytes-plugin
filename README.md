@@ -126,7 +126,12 @@
 
 
 
+## Adding SVG Icons
 
+1. Copy `SVG` code of the icon you want to add.
+1. In `svg-icons/codecademy-icons.svg`, paste the code after the last `</symbol>` tag.
+1. Change the opening/closing level `<svg>` tags to `<symbol/>`s - keeping only the `viewBox` attribute.
+1. Give the `<Symbol/>` an `id` attribute that will be used to reference the `icon` in the plugin.
 
 
 

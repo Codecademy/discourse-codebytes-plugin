@@ -7,7 +7,7 @@ function initializeCodeByte(api) {
       title: "CodeBytes",
       id: "codebyte",
       group: "insertions",
-      icon: "far-copyright",
+      icon: "codecademy-logo",
       action: () => toolbar.context.send("insertCodeByte", "test"),
     });
 
