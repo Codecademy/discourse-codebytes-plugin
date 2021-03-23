@@ -13,7 +13,6 @@ function initializeCodeByte(api) {
 
     const onSaveResponse = (message) => {
       if (message.data.codeBytesSaveResponse)
-      console.log(message.data.codeBytesSaveResponse)
       toolbar.context.send("updateCodeByte", message.data.codeBytesSaveResponse);
     };
 
@@ -29,7 +28,6 @@ function initializeCodeByte(api) {
         const addBlockInline = lineValueSelection.lineVal.length === 0
         const isTextSelected = selection.value.length > 0
         if(isTextSelected){
-          console.log(lineValueSelection, selection)
           if(addBlockInline || 
             lineValueSelection.lineVal === lineValueSelection.value || 
             lineValueSelection.pre.trim() === ""){
@@ -49,7 +47,6 @@ function initializeCodeByte(api) {
         }
       },
       updateCodeByte({code, language}) {
-        console.log(code, language)
         const editorValue = this.get('value')
         const endTag = '[/codebyte]'
         const endTagPos = editorValue.indexOf(endTag)
