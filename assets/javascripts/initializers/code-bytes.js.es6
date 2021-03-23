@@ -50,17 +50,26 @@ function initializeCodeByte(api) {
           return
         }
       },
-      updateCodeByte(text) {
-        const startTag = '[codebyte]'
-        const endTag = '[/codebyte]'
+      updateCodeByte({code, language}) {
+        console.log(code, language)
         const editorValue = this.get('value')
-        const startTagPos = editorValue.indexOf(startTag)
+        const endTag = '[/codebyte]'
         const endTagPos = editorValue.indexOf(endTag)
+        let startTagPos
+        const startTag = '[codebyte]'
+        const startTagWithLanguage = `[codebyte language=${language}]`
+        const startTagHasLanguage = editorValue.indexOf(startTagWithLanguage) !== -1
+
+        if(startTagHasLanguage){
+          startTagPos = editorValue.indexOf(startTagWithLanguage)
+        } else {
+          startTagPos = editorValue.indexOf(startTag)
+        }
+
         const preValue = editorValue.slice(0,startTagPos)
         const postValue = editorValue.slice(endTagPos+endTag.length)
-        const codeBlock = `${startTag}\n${text}\n${endTag}`
+        const codeBlock = `${startTagWithLanguage}\n${code}\n${endTag}`
         this.set('value', `${preValue}${codeBlock}${postValue}`)
-        
       },
     },
   });
