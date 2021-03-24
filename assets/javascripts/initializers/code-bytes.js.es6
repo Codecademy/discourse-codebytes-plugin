@@ -25,27 +25,35 @@ function initializeCodeByte(api) {
   api.modifyClass("component:d-editor", {
     actions: {
       insertCodeByte() {
-        const exampleFormat = '[codebyte]\nhello world\n[/codebyte]'
+        let exampleFormat = '[codebyte]\nhello world\n[/codebyte]'
+        let startTag = '[codebyte]\n'
+        let endTag = '\n[/codebyte]'
         const lineValueSelection = this._getSelected("", {lineVal:true})
         const selection = this._getSelected()
-        const addBlockInline = lineValueSelection.lineVal.length === 0
+        const addBlockInSameline = lineValueSelection.lineVal.length === 0
         const isTextSelected = selection.value.length > 0
+        const isWholeLineSelected = lineValueSelection.lineVal === lineValueSelection.value
+        const isBeginningOfLineSelected = lineValueSelection.pre.trim() === ""
+        const newLineAfterSelection = selection.post[0]==='\n'
         if(isTextSelected){
-          if(addBlockInline || 
-            lineValueSelection.lineVal === lineValueSelection.value || 
-            lineValueSelection.pre.trim() === ""){
-            this.set('value',`${selection.pre}[codebyte]\n${selection.value}\n[/codebyte]${selection.post}`)
-          } else {
-            this.set('value',`${selection.pre}\n[codebyte]\n${selection.value}\n[/codebyte]${selection.post}`)
+          if(!(addBlockInSameline || isWholeLineSelected || isBeginningOfLineSelected)) {
+            startTag = '\n' + startTag
           }
+          if(!newLineAfterSelection) {
+            endTag = endTag + '\n'
+          }
+          this.set('value', `${selection.pre}${startTag}${selection.value}${endTag}${selection.post}`)
           return 
         }
         else {
-          if(addBlockInline){
-            this._insertText(exampleFormat)
-          } else {
-            this._insertText(`\n${exampleFormat}`)
+          console.log(addBlockInSameline, newLineAfterSelection)
+          if(!addBlockInSameline){
+            exampleFormat = '\n'+exampleFormat
           }
+          if(!newLineAfterSelection) {
+            exampleFormat = exampleFormat + '\n'
+          }
+          this._insertText(exampleFormat)
           return
         }
       },
