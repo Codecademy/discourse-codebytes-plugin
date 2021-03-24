@@ -8,7 +8,7 @@ function initializeCodeByte(api) {
       id: "codebyte",
       group: "insertions",
       icon: "codecademy-logo",
-      action: () => toolbar.context.send("insertCodeByte", "test"),
+      action: () => toolbar.context.send("insertCodeByte"),
     });
 
     const onSaveResponse = (message) => {
@@ -24,11 +24,50 @@ function initializeCodeByte(api) {
 
   api.modifyClass("component:d-editor", {
     actions: {
-      insertCodeByte(text) {
-        this._insertText('[codebyte]\n' + text + '\n[/codebyte]');
+      insertCodeByte() {
+        const exampleFormat = '[codebyte]\nhello world\n[/codebyte]'
+        const lineValueSelection = this._getSelected("", {lineVal:true})
+        const selection = this._getSelected()
+        const addBlockInline = lineValueSelection.lineVal.length === 0
+        const isTextSelected = selection.value.length > 0
+        if(isTextSelected){
+          if(addBlockInline || 
+            lineValueSelection.lineVal === lineValueSelection.value || 
+            lineValueSelection.pre.trim() === ""){
+            this.set('value',`${selection.pre}[codebyte]\n${selection.value}\n[/codebyte]${selection.post}`)
+          } else {
+            this.set('value',`${selection.pre}\n[codebyte]\n${selection.value}\n[/codebyte]${selection.post}`)
+          }
+          return 
+        }
+        else {
+          if(addBlockInline){
+            this._insertText(exampleFormat)
+          } else {
+            this._insertText(`\n${exampleFormat}`)
+          }
+          return
+        }
       },
-      updateCodeByte({ code, language }) {
-        this.set('value', `[codebyte${language ? ` language=${language}` : ''}]\n${code}\n[/codebyte]`);
+      updateCodeByte({code, language}) {
+        const editorValue = this.get('value')
+        const endTag = '[/codebyte]'
+        const endTagPos = editorValue.indexOf(endTag)
+        let startTagPos
+        const startTag = '[codebyte]'
+        const startTagWithLanguage = `[codebyte language=${language}]`
+        const startTagHasLanguage = editorValue.indexOf(startTagWithLanguage) !== -1
+
+        if(startTagHasLanguage){
+          startTagPos = editorValue.indexOf(startTagWithLanguage)
+        } else {
+          startTagPos = editorValue.indexOf(startTag)
+        }
+
+        const preValue = editorValue.slice(0,startTagPos)
+        const postValue = editorValue.slice(endTagPos+endTag.length)
+        const codeBlock = `${startTagWithLanguage}\n${code}\n${endTag}`
+        this.set('value', `${preValue}${codeBlock}${postValue}`)
       },
     },
   });
