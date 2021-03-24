@@ -49,25 +49,28 @@ function initializeCodeByte(api) {
           return
         }
       },
-      updateCodeByte({code, language}) {
-        const editorValue = this.get('value')
-        const endTag = '[/codebyte]'
-        const endTagPos = editorValue.indexOf(endTag)
-        let startTagPos
-        const startTag = '[codebyte]'
-        const startTagWithLanguage = `[codebyte language=${language}]`
-        const startTagHasLanguage = editorValue.indexOf(startTagWithLanguage) !== -1
+      updateCodeByte({code, language, index}) {
+        const editorValue = this.get('value');
+        const startTagWithLanguage = `[codebyte language=${language}]`;
 
-        if(startTagHasLanguage){
-          startTagPos = editorValue.indexOf(startTagWithLanguage)
-        } else {
-          startTagPos = editorValue.indexOf(startTag)
+        const startTag = '[codebyte';
+        let startTagPos = -1;
+
+        for (let i = 0; i <= index; i += 1) {
+          startTagPos = editorValue.indexOf(startTag, startTagPos + 1);
+          if (startTagPos < 0) {
+            throw `Unable to find codebyte with index ${index}`;
+          };
         }
 
-        const preValue = editorValue.slice(0,startTagPos)
-        const postValue = editorValue.slice(endTagPos+endTag.length)
-        const codeBlock = `${startTagWithLanguage}\n${code}\n${endTag}`
-        this.set('value', `${preValue}${codeBlock}${postValue}`)
+        const endTag = '[/codebyte]';
+        const endTagPos = editorValue.indexOf(endTag, startTagPos);
+
+        const preValue = editorValue.slice(0,startTagPos);
+        const postValue = editorValue.slice(endTagPos+endTag.length);
+        const codeBlock = `${startTagWithLanguage}\n${code}\n${endTag}`;
+
+        this.set('value', `${preValue}${codeBlock}${postValue}`);
       },
     },
   });
@@ -94,7 +97,7 @@ function initializeCodeByte(api) {
   };
 
   api.decorateCookedElement((elem) => {
-    elem.querySelectorAll("div.d-codebyte").forEach( async (div) => {
+    elem.querySelectorAll("div.d-codebyte").forEach( async (div, index) => {
       const codebyteFrame = await renderCodebyteFrame(div.dataset.language, div.textContent.trim());
       div.innerHTML = '';
       div.appendChild(codebyteFrame);
@@ -104,7 +107,7 @@ function initializeCodeByte(api) {
         saveButton.className = 'btn-primary';
         saveButton.textContent = 'Save to post';
         saveButton.style.marginTop = '24px';
-        saveButton.onclick = () => codebyteFrame.contentWindow.postMessage({codeBytesSaveRequested: true}, '*');
+        saveButton.onclick = () => codebyteFrame.contentWindow.postMessage({codeBytesSaveRequested: {index}}, '*');
         div.appendChild(saveButton);
       }
     });
