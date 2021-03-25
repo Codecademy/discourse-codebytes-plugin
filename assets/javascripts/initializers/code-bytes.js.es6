@@ -25,6 +25,7 @@ function initializeCodeByte(api) {
   api.modifyClass("component:d-editor", {
     actions: {
       insertCodeByte() {
+        let exampleFormat = '[codebyte]\nhello world\n[/codebyte]'
         let startTag = '[codebyte]\n'
         let endTag = '\n[/codebyte]'
         const lineValueSelection = this._getSelected("", {lineVal:true})
@@ -45,7 +46,6 @@ function initializeCodeByte(api) {
           return 
         }
         else {
-          console.log(addBlockInSameline, newLineAfterSelection)
           if(!addBlockInSameline){
             exampleFormat = '\n'+exampleFormat
           }
