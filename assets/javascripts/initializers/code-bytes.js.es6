@@ -11,6 +11,12 @@ function initializeCodeByte(api) {
       action: () => toolbar.context.send("insertCodeByte"),
     });
 
+    const onCopyResponse = (message) => {
+      if (message.data.codeBytesCopyResponse) {
+        navigator.clipboard.writeText(message.data.codeBytesCopyResponse.code)
+      }
+    }
+
     const onSaveResponse = (message) => {
       if (toolbar.context.isDestroyed || toolbar.context.isDestroying) {
         window.removeEventListener("message", onSaveResponse);
@@ -19,6 +25,7 @@ function initializeCodeByte(api) {
       }
     };
 
+    window.addEventListener("message", onCopyResponse, false);
     window.addEventListener("message", onSaveResponse, false);
   });
 
