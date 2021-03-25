@@ -107,7 +107,7 @@ function initializeCodeByte(api) {
         saveButton.className = 'btn-primary';
         saveButton.textContent = 'Save to post';
         saveButton.style.marginTop = '24px';
-        saveButton.onclick = () => codebyteFrame.contentWindow.postMessage({codeBytesSaveRequested: {index}}, '*');
+        saveButton.onclick = () => codebyteFrame.contentWindow.postMessage({codeBytesSaveRequested: {id: index}}, '*');
         div.appendChild(saveButton);
       }
     });
