@@ -25,7 +25,6 @@ function initializeCodeByte(api) {
   api.modifyClass("component:d-editor", {
     actions: {
       insertCodeByte() {
-        let exampleFormat = '[codebyte]\nhello world\n[/codebyte]'
         let startTag = '[codebyte]\n'
         let endTag = '\n[/codebyte]'
         const lineValueSelection = this._getSelected("", {lineVal:true})
@@ -57,25 +56,12 @@ function initializeCodeByte(api) {
           return
         }
       },
-      updateCodeByte({code, language}) {
-        const editorValue = this.get('value')
-        const endTag = '[/codebyte]'
-        const endTagPos = editorValue.indexOf(endTag)
-        let startTagPos
-        const startTag = '[codebyte]'
-        const startTagWithLanguage = `[codebyte language=${language}]`
-        const startTagHasLanguage = editorValue.indexOf(startTagWithLanguage) !== -1
-
-        if(startTagHasLanguage){
-          startTagPos = editorValue.indexOf(startTagWithLanguage)
-        } else {
-          startTagPos = editorValue.indexOf(startTag)
-        }
-
-        const preValue = editorValue.slice(0,startTagPos)
-        const postValue = editorValue.slice(endTagPos+endTag.length)
-        const codeBlock = `${startTagWithLanguage}\n${code}\n${endTag}`
-        this.set('value', `${preValue}${codeBlock}${postValue}`)
+      updateCodeByte({code, language, index}) {
+        let matchIndex = -1;
+        editorValue.replace(/\[codebyte( language=(.*))?]\n?(.*)?\n?\[\/codebyte]/g, (match) => {
+          matchIndex++;
+          return matchIndex === index ? `[codebyte language=${language}]\n${code}\n[/codebyte]` : match;
+        });
       },
     },
   });
@@ -102,7 +88,7 @@ function initializeCodeByte(api) {
   };
 
   api.decorateCookedElement((elem) => {
-    elem.querySelectorAll("div.d-codebyte").forEach( async (div) => {
+    elem.querySelectorAll("div.d-codebyte").forEach( async (div, index) => {
       const codebyteFrame = await renderCodebyteFrame(div.dataset.language, div.textContent.trim());
       div.innerHTML = '';
       div.appendChild(codebyteFrame);
@@ -112,7 +98,7 @@ function initializeCodeByte(api) {
         saveButton.className = 'btn-primary';
         saveButton.textContent = 'Save to post';
         saveButton.style.marginTop = '24px';
-        saveButton.onclick = () => codebyteFrame.contentWindow.postMessage({codeBytesSaveRequested: true}, '*');
+        saveButton.onclick = () => codebyteFrame.contentWindow.postMessage({codeBytesSaveRequested: {id: index}}, '*');
         div.appendChild(saveButton);
       }
     });
