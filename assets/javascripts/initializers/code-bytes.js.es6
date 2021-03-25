@@ -50,27 +50,11 @@ function initializeCodeByte(api) {
         }
       },
       updateCodeByte({code, language, index}) {
-        const editorValue = this.get('value');
-        const startTagWithLanguage = `[codebyte language=${language}]`;
-
-        const startTag = '[codebyte';
-        let startTagPos = -1;
-
-        for (let i = 0; i <= index; i += 1) {
-          startTagPos = editorValue.indexOf(startTag, startTagPos + 1);
-          if (startTagPos < 0) {
-            throw `Unable to find codebyte with index ${index}`;
-          };
-        }
-
-        const endTag = '[/codebyte]';
-        const endTagPos = editorValue.indexOf(endTag, startTagPos);
-
-        const preValue = editorValue.slice(0,startTagPos);
-        const postValue = editorValue.slice(endTagPos+endTag.length);
-        const codeBlock = `${startTagWithLanguage}\n${code}\n${endTag}`;
-
-        this.set('value', `${preValue}${codeBlock}${postValue}`);
+        let matchIndex = -1;
+        editorValue.replace(/\[codebyte( language=(.*))?]\n?(.*)?\n?\[\/codebyte]/g, (match) => {
+          matchIndex++;
+          return matchIndex === index ? `[codebyte language=${language}]\n${code}\n[/codebyte]` : match;
+        });
       },
     },
   });
