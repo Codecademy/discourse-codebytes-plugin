@@ -56,12 +56,14 @@ function initializeCodeByte(api) {
           return
         }
       },
-      updateCodeByte({code, language, index}) {
+      updateCodeByte({code, language, id}) {
+        const editorValue = this.get('value')
         let matchIndex = -1;
-        editorValue.replace(/\[codebyte( language=(.*))?]\n?(.*)?\n?\[\/codebyte]/g, (match) => {
+        const newValue = editorValue.replace(/\[codebyte( language=(.*))?]\n?(.*)?\n?\[\/codebyte]/g, (match) => {
           matchIndex++;
-          return matchIndex === index ? `[codebyte language=${language}]\n${code}\n[/codebyte]` : match;
+          return matchIndex === id ? `[codebyte language=${language}]\n${code}\n[/codebyte]` : match;
         });
+        this.set('value', newValue);
       },
     },
   });
