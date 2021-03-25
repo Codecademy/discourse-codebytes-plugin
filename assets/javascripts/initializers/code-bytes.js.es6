@@ -75,6 +75,7 @@ function initializeCodeByte(api) {
       const frame = document.createElement('iframe');
 
       const encodedURI = Base64.encodeURI(code);
+      frame.allow = "clipboard-write";
       frame.src = `http://localhost:8000/codebyte-editor?lang=${language}&code=${encodedURI}`;
 
       Object.assign(frame.style, {
