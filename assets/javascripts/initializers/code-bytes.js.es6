@@ -1,24 +1,15 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
 import loadScript from "discourse/lib/load-script";
 
-const createCodecademyToolBarGroup = (toolbar) => {
-  toolbar.groups.lastObject.lastGroup = false;
-
-  toolbar.groups.addObject({ group: 'codecademy', buttons: [], lastGroup: true });
-
-  toolbar.addButton({
-    id: "codebyte",
-    title: "composer.codebyte",
-    group: "codecademy",
-    icon: "codecademy-logo",
-    className: "codecademy-codebyte-discourse-btn",
-    action: () => toolbar.context.send("insertCodeByte"),
-  });
-}
-
 function initializeCodeByte(api) {
   api.onToolbarCreate((toolbar) => {
-    createCodecademyToolBarGroup(toolbar);
+    toolbar.addButton({
+      title: "CodeBytes",
+      id: "codebyte",
+      group: "insertions",
+      icon: "codecademy-logo",
+      action: () => toolbar.context.send("insertCodeByte"),
+    });
 
     const onSaveResponse = (message) => {
       if (toolbar.context.isDestroyed || toolbar.context.isDestroying) {
@@ -113,7 +104,7 @@ function initializeCodeByte(api) {
         div.appendChild(saveButton);
       }
     });
-  }), {id: 'codebyte-preview'};
+  });
 }
 
 export default {
