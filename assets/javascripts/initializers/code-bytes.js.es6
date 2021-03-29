@@ -2,6 +2,8 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 import loadScript from "discourse/lib/load-script";
 
 function initializeCodeByte(api) {
+  let editableCodebytes = [];
+
   api.onToolbarCreate((toolbar) => {
     toolbar.addButton({
       title: "CodeBytes",
@@ -14,8 +16,11 @@ function initializeCodeByte(api) {
     const onSaveResponse = (message) => {
       if (toolbar.context.isDestroyed || toolbar.context.isDestroying) {
         window.removeEventListener("message", onSaveResponse);
-      } else if (message.data.codeBytesSaveResponse) {
-        toolbar.context.send("updateCodeByte", message.data.codeBytesSaveResponse);
+      } else if (message.data.codeByteSaveResponse) {
+        const index = editableCodebytes.indexOf(message.source);
+        if (index >= 0) {
+          toolbar.context.send("updateCodeByte", {...message.data.codeByteSaveResponse, index});
+        }
       }
     };
 
@@ -56,27 +61,27 @@ function initializeCodeByte(api) {
           return
         }
       },
-      updateCodeByte({code, language, id}) {
+      updateCodeByte({text, language, index}) {
         const editorValue = this.get('value')
         let matchIndex = -1;
         const newValue = editorValue.replace(/\[codebyte( language=(.*))?]\n?(.*)?\n?\[\/codebyte]/g, (match) => {
           matchIndex++;
-          return matchIndex === id ? `[codebyte language=${language}]\n${code}\n[/codebyte]` : match;
+          return matchIndex === index ? `[codebyte language=${language}]\n${text}\n[/codebyte]` : match;
         });
         this.set('value', newValue);
       },
     },
   });
 
-  function renderCodebyteFrame(language = '', code = '') {
+  function renderCodebyteFrame(language = '', text = '') {
     return loadScript(
       "https://cdn.jsdelivr.net/npm/js-base64@3.6.0/base64.min.js"
     ).then(() => {
       const frame = document.createElement('iframe');
 
-      const encodedURI = Base64.encodeURI(code);
+      const encodedURI = Base64.encodeURI(text);
       frame.allow = "clipboard-write";
-      frame.src = `http://localhost:8000/codebyte-editor?lang=${language}&code=${encodedURI}`;
+      frame.src = `http://localhost:8000/codebyte-editor?lang=${language}&text=${encodedURI}`;
 
       Object.assign(frame.style, {
         display: 'block',
@@ -91,17 +96,25 @@ function initializeCodeByte(api) {
   };
 
   api.decorateCookedElement((elem) => {
-    elem.querySelectorAll("div.d-codebyte").forEach( async (div, index) => {
+    const isEditorPreview = elem.classList.contains('d-editor-preview');
+
+    if (isEditorPreview) {
+      editableCodebytes = [];
+    }
+
+    elem.querySelectorAll("div.d-codebyte").forEach(async (div, index) => {
       const codebyteFrame = await renderCodebyteFrame(div.dataset.language, div.textContent.trim());
       div.innerHTML = '';
       div.appendChild(codebyteFrame);
 
-      if (elem.classList.contains('d-editor-preview')) {
+      if (isEditorPreview) {
+        editableCodebytes.push(codebyteFrame.contentWindow);
+
         const saveButton = document.createElement('button');
         saveButton.className = 'btn-primary';
         saveButton.textContent = 'Save to post';
         saveButton.style.marginTop = '24px';
-        saveButton.onclick = () => codebyteFrame.contentWindow.postMessage({codeBytesSaveRequested: {id: index}}, '*');
+        saveButton.onclick = () => codebyteFrame.contentWindow.postMessage({codeByteSaveRequest: true}, '*');
         div.appendChild(saveButton);
       }
     });
