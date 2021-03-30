@@ -2,8 +2,6 @@ import { withPluginApi } from "discourse/lib/plugin-api";
 import loadScript from "discourse/lib/load-script";
 
 function initializeCodeByte(api) {
-  let editableCodebytes = [];
-
   api.onToolbarCreate((toolbar) => {
     toolbar.addButton({
       title: "CodeBytes",
@@ -12,22 +10,33 @@ function initializeCodeByte(api) {
       icon: "codecademy-logo",
       action: () => toolbar.context.send("insertCodeByte"),
     });
-
-    const onSaveResponse = (message) => {
-      if (toolbar.context.isDestroyed || toolbar.context.isDestroying) {
-        window.removeEventListener("message", onSaveResponse);
-      } else if (message.data.codeByteSaveResponse) {
-        const index = editableCodebytes.indexOf(message.source);
-        if (index >= 0) {
-          toolbar.context.send("updateCodeByte", {...message.data.codeByteSaveResponse, index});
-        }
-      }
-    };
-
-    window.addEventListener("message", onSaveResponse, false);
   });
 
   api.modifyClass("component:d-editor", {
+    init() {
+      this._super(...arguments);
+
+      this.onSaveResponse = (message) => {
+        const editableCodebytes = Array.from(
+          this.element.querySelectorAll('.d-editor-preview .d-codebyte iframe')
+        ).map((frame) => frame.contentWindow);
+
+        if (message.data.codeByteSaveResponse) {
+          const index = editableCodebytes.indexOf(message.source);
+          if (index >= 0) {
+            this.send("updateCodeByte", index, message.data.codeByteSaveResponse);
+          }
+        }
+      };
+
+      window.addEventListener("message", this.onSaveResponse, false);
+    },
+
+    willDestroyElement() {
+      this._super(...arguments);
+      window.removeEventListener("message", this.onSaveResponse, false);
+    },
+
     actions: {
       insertCodeByte() {
         let exampleFormat = '[codebyte]\nhello world\n[/codebyte]'
@@ -61,7 +70,7 @@ function initializeCodeByte(api) {
           return
         }
       },
-      updateCodeByte({text, language, index}) {
+      updateCodeByte(index, { text, language }) {
         const editorValue = this.get('value')
         let matchIndex = -1;
         const newValue = editorValue.replace(/\[codebyte( language=(.*))?]\n?(.*)?\n?\[\/codebyte]/g, (match) => {
@@ -96,20 +105,12 @@ function initializeCodeByte(api) {
   };
 
   api.decorateCookedElement((elem) => {
-    const isEditorPreview = elem.classList.contains('d-editor-preview');
-
-    if (isEditorPreview) {
-      editableCodebytes = [];
-    }
-
     elem.querySelectorAll("div.d-codebyte").forEach(async (div, index) => {
       const codebyteFrame = await renderCodebyteFrame(div.dataset.language, div.textContent.trim());
       div.innerHTML = '';
       div.appendChild(codebyteFrame);
 
-      if (isEditorPreview) {
-        editableCodebytes.push(codebyteFrame.contentWindow);
-
+      if (elem.classList.contains('d-editor-preview')) {
         const saveButton = document.createElement('button');
         saveButton.className = 'btn-primary';
         saveButton.textContent = 'Save to post';
