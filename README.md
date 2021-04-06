@@ -125,6 +125,12 @@
 ### You can now open the CodeBytes repo in your editor, and create a feature branch!
 
 
+## Use the official Codecademy Discourse theme
+1. (Click here to download the zip](http://github.com/codecademy-engineering/codecademy-discourse-theme/archive/refs/heads/main.zip) from http://github.com/codecademy-engineering/codecademy-discourse-theme/archive/refs/heads/main.zip
+2. Go to http://localhost:3000/admin/customize/themes
+3. Click `Install` > `From your device` > `Choose File` and upload the `.zip` file from step 2.
+4. In the options for `Codecademy Rebrand`, toggle ` Theme is enabled by default` and `Theme can be selected by users`.
+5. Refresh!
 
 ## Adding SVG Icons
 
