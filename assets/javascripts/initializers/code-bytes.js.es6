@@ -1,37 +1,47 @@
 import { withPluginApi } from "discourse/lib/plugin-api";
 import loadScript from "discourse/lib/load-script";
 
-const createCodecademyToolBarGroup = (toolbar) => {
-  toolbar.groups.lastObject.lastGroup = false;
-
-  toolbar.groups.addObject({ group: 'codecademy', buttons: [], lastGroup: true });
-
-  toolbar.addButton({
-    id: "codebyte",
-    title: "composer.codebyte",
-    group: "codecademy",
-    icon: "codecademy-logo",
-    className: "codecademy-codebyte-discourse-btn",
-    action: () => toolbar.context.send("insertCodeByte"),
-  });
-}
-
 function initializeCodeByte(api) {
   api.onToolbarCreate((toolbar) => {
-    createCodecademyToolBarGroup(toolbar);
+    toolbar.groups.lastObject.lastGroup = false;
 
-    const onSaveResponse = (message) => {
-      if (toolbar.context.isDestroyed || toolbar.context.isDestroying) {
-        window.removeEventListener("message", onSaveResponse);
-      } else if (message.data.codeBytesSaveResponse) {
-        toolbar.context.send("updateCodeByte", message.data.codeBytesSaveResponse);
-      }
-    };
+    toolbar.groups.addObject({ group: 'codecademy', buttons: [], lastGroup: true });
 
-    window.addEventListener("message", onSaveResponse, false);
+    toolbar.addButton({
+      id: "codebyte",
+      title: "composer.codebyte",
+      group: "codecademy",
+      icon: "codecademy-logo",
+      className: "codecademy-codebyte-discourse-btn",
+      action: () => toolbar.context.send("insertCodeByte"),
+    });
   });
 
   api.modifyClass("component:d-editor", {
+    init() {
+      this._super(...arguments);
+
+      this.onSaveResponse = (message) => {
+        if (message.data.codeByteSaveResponse) {
+          const editableCodebytes = Array.from(
+            this.element.querySelectorAll('.d-editor-preview .d-codebyte iframe')
+          ).map((frame) => frame.contentWindow);
+
+          const index = editableCodebytes.indexOf(message.source);
+          if (index >= 0) {
+            this.send("updateCodeByte", index, message.data.codeByteSaveResponse);
+          }
+        }
+      };
+
+      window.addEventListener("message", this.onSaveResponse, false);
+    },
+
+    willDestroyElement() {
+      this._super(...arguments);
+      window.removeEventListener("message", this.onSaveResponse, false);
+    },
+
     actions: {
       insertCodeByte() {
         let exampleFormat = '[codebyte]\nhello world\n[/codebyte]'
@@ -65,27 +75,27 @@ function initializeCodeByte(api) {
           return
         }
       },
-      updateCodeByte({code, language, id}) {
+      updateCodeByte(index, { text, language }) {
         const editorValue = this.get('value')
         let matchIndex = -1;
         const newValue = editorValue.replace(/\[codebyte( language=(.*))?]\n?(.*)?\n?\[\/codebyte]/g, (match) => {
           matchIndex++;
-          return matchIndex === id ? `[codebyte language=${language}]\n${code}\n[/codebyte]` : match;
+          return matchIndex === index ? `[codebyte language=${language}]\n${text}\n[/codebyte]` : match;
         });
         this.set('value', newValue);
       },
     },
   });
 
-  function renderCodebyteFrame(language = '', code = '') {
+  function renderCodebyteFrame(language = '', text = '') {
     return loadScript(
       "https://cdn.jsdelivr.net/npm/js-base64@3.6.0/base64.min.js"
     ).then(() => {
       const frame = document.createElement('iframe');
 
-      const encodedURI = Base64.encodeURI(code);
+      const encodedURI = Base64.encodeURI(text);
       frame.allow = "clipboard-write";
-      frame.src = `http://localhost:8000/codebyte-editor?lang=${language}&code=${encodedURI}`;
+      frame.src = `http://localhost:8000/codebyte-editor?lang=${language}&text=${encodedURI}`;
 
       Object.assign(frame.style, {
         display: 'block',
@@ -100,7 +110,7 @@ function initializeCodeByte(api) {
   };
 
   api.decorateCookedElement((elem) => {
-    elem.querySelectorAll("div.d-codebyte").forEach( async (div, index) => {
+    elem.querySelectorAll("div.d-codebyte").forEach(async (div, index) => {
       const codebyteFrame = await renderCodebyteFrame(div.dataset.language, div.textContent.trim());
       div.innerHTML = '';
       div.appendChild(codebyteFrame);
@@ -110,7 +120,7 @@ function initializeCodeByte(api) {
         saveButton.className = 'btn-primary';
         saveButton.textContent = 'Save to post';
         saveButton.style.marginTop = '24px';
-        saveButton.onclick = () => codebyteFrame.contentWindow.postMessage({codeBytesSaveRequested: {id: index}}, '*');
+        saveButton.onclick = () => codebyteFrame.contentWindow.postMessage({codeByteSaveRequest: true}, '*');
         div.appendChild(saveButton);
       }
     });
