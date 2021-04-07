@@ -22,11 +22,11 @@ function initializeCodeByte(api) {
       this._super(...arguments);
 
       this.onSaveResponse = (message) => {
-        const editableCodebytes = Array.from(
-          this.element.querySelectorAll('.d-editor-preview .d-codebyte iframe')
-        ).map((frame) => frame.contentWindow);
-
         if (message.data.codeByteSaveResponse) {
+          const editableCodebytes = Array.from(
+            this.element.querySelectorAll('.d-editor-preview .d-codebyte iframe')
+          ).map((frame) => frame.contentWindow);
+
           const index = editableCodebytes.indexOf(message.source);
           if (index >= 0) {
             this.send("updateCodeByte", index, message.data.codeByteSaveResponse);
