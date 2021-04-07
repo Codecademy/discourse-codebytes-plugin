@@ -1,2 +1,22 @@
-.code-bytes {
+.codecademy-codebyte-discourse-btn.btn-icon.btn {
+  display: inline-flex;
+  flex-grow: 1;
+  flex-wrap: wrap;
+  max-height: 30px;
+  overflow-wrap: break-word;
+  padding: 0;
+  overflow: hidden;
+}
+
+.d-icon.d-icon-codecademy-logo.svg-icon.svg-string {
+  height: 15px;
+  width: 28px;
+  padding: 7.5px 0.5em;
+}
+
+.codecademy-codebyte-discourse-btn::after {
+  content: 'Create a Codebyte';
+  font-weight: bold;
+  word-break: break-all;
+  padding-top: 0.25em;
 }

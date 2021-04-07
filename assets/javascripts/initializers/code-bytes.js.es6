@@ -3,11 +3,16 @@ import loadScript from "discourse/lib/load-script";
 
 function initializeCodeByte(api) {
   api.onToolbarCreate((toolbar) => {
+    toolbar.groups.lastObject.lastGroup = false;
+
+    toolbar.groups.addObject({ group: 'codecademy', buttons: [], lastGroup: true });
+
     toolbar.addButton({
-      title: "CodeBytes",
       id: "codebyte",
-      group: "insertions",
+      title: "composer.codebyte",
+      group: "codecademy",
       icon: "codecademy-logo",
+      className: "codecademy-codebyte-discourse-btn",
       action: () => toolbar.context.send("insertCodeByte"),
     });
   });
@@ -119,7 +124,7 @@ function initializeCodeByte(api) {
         div.appendChild(saveButton);
       }
     });
-  });
+  }), {id: 'codebyte-preview'};
 }
 
 export default {
