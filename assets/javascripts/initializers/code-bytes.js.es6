@@ -95,7 +95,7 @@ function initializeCodeByte(api) {
 
       const encodedURI = Base64.encodeURI(text);
       frame.allow = "clipboard-write";
-      frame.src = `http://localhost:8000/codebyte-editor?lang=${language}&text=${encodedURI}`;
+      frame.src = `https://www.codecademy.com/codebyte-editor?lang=${language}&text=${encodedURI}`;
 
       Object.assign(frame.style, {
         display: 'block',
