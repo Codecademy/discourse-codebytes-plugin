@@ -1,7 +1,7 @@
-import RestAdapter from "discourse/adapters/rest";
+import RestAdapter from 'discourse/adapters/rest';
 
 export default RestAdapter.extend({
   basePath() {
-    return "/code-bytes/";
-  }
+    return '/code-bytes/';
+  },
 });
