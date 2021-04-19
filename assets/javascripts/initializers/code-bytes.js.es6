@@ -44,7 +44,7 @@ function initializeCodeByte(api) {
 
     actions: {
       insertCodeByte() {
-        let exampleFormat = '[codebyte]\nhello world\n[/codebyte]'
+        let exampleFormat = '[codebyte]\n\n[/codebyte]'
         let startTag = '[codebyte]\n'
         let endTag = '\n[/codebyte]'
         const lineValueSelection = this._getSelected("", {lineVal:true})
