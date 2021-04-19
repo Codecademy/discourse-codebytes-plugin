@@ -19,7 +19,7 @@ const blockRule = {
 };
 
 export function setup(helper) {
-  helper.registerOptions((opts,siteSettings)=>{
+  helper.registerOptions((opts, siteSettings) => {
     opts.features["code-bytes"] = !!siteSettings.code_bytes_enabled;
   });
 
