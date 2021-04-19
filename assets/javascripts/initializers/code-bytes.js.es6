@@ -130,7 +130,7 @@ function initializeCodeByte(api) {
 export default {
   name: "code-bytes",
 
-  initialize() {
+  initialize(container) {
     const siteSettings = container.lookup("site-settings:main");
       if (siteSettings.code_bytes_enabled) {
         withPluginApi("0.8.31", initializeCodeByte);
