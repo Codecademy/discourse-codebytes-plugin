@@ -19,6 +19,10 @@ const blockRule = {
 };
 
 export function setup(helper) {
+  helper.registerOptions((opts, siteSettings) => {
+    opts.features["code-bytes"] = !!siteSettings.code_bytes_enabled;
+  });
+
   helper.registerPlugin((md) => {
     md.block.bbcode.ruler.push("block-codebyte", blockRule);
   });
