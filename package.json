@@ -26,7 +26,7 @@
     "prettier": "^2.2.1"
   },
   "lint-staged": {
-    "**/*.{js,ts,tsx,json}": [
+    "./assets/javascripts/**/*.js.es6": [
       "eslint-fix",
       "yarn prettier --write"
     ]
