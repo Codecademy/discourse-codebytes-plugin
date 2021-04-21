@@ -2,8 +2,10 @@
   CodeBytes Discourse Plugin
 </h1>
 
-[Setup Guide](#setup-guide)
-[Discourse Docs](#discourse-docs)
+- [Description](#description)
+- [Setup](#setup)
+- [Usage](#usage)
+- [Developer Guide](#developer-guide)
 
 ## Description
 ![Screen Shot 2021-04-21 at 6 58 14 PM](https://user-images.githubusercontent.com/4821431/115631293-88b08100-a2d3-11eb-84a4-c46a2bbc33c4.png)
