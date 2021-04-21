@@ -7,8 +7,6 @@
 # url: https://github.com/codecademy-engineering/discourse-codebytes-plugin
 
 register_asset 'stylesheets/common/code-bytes.scss'
-register_asset 'stylesheets/desktop/code-bytes.scss', :desktop
-register_asset 'stylesheets/mobile/code-bytes.scss', :mobile
 
 extend_content_security_policy(
   script_src: ['https://cdn.jsdelivr.net/npm/js-base64@3.6.0/base64.min.js']
