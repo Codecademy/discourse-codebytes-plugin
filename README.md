@@ -19,7 +19,7 @@ That's it!
 ### Add a CodeByte to a post
 #### Using the toolbar button
 1. Click the "Create a Codebyte" button in the editor toolbar to insert a new, empty codebyte. ![Screen Shot 2021-04-21 at 7 07 11 PM](https://user-images.githubusercontent.com/4821431/115631952-c6fa7000-a2d4-11eb-9893-b508573a79e8.png)
-2. The CodeByte editor will appear in the preview pane. Select the language you would like to use. This will automaitcally be saved to the markdown editor. ![Screen Shot 2021-04-21 at 7 09 58 PM](https://user-images.githubusercontent.com/4821431/115632170-2b1d3400-a2d5-11eb-899f-5adbc0d3997a.png)
+2. The CodeByte editor will appear in the preview pane. Select the language you would like to use. This will automatically be saved to the markdown editor. ![Screen Shot 2021-04-21 at 7 09 58 PM](https://user-images.githubusercontent.com/4821431/115632170-2b1d3400-a2d5-11eb-899f-5adbc0d3997a.png)
 3. You can type your code in the CodeByte editor itself. This allows you to execute your code as you go along, as well as take advantage of features such as autocomplete and syntax highlighting. The code will be auto-saved to markdown after a few seconds of inactivity. You can also click the "Save to post" button to manually save the contents of the CodeByte to markdown. ![Screen Shot 2021-04-21 at 7 11 01 PM](https://user-images.githubusercontent.com/4821431/115632251-52740100-a2d5-11eb-996b-383fc4adfb2c.png)
 #### Using markdown
 1. If you prefer not to use the editor in the preview pane, you can use markdown directly to create a CodeByte using the [codebyte] tag.
