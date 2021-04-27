@@ -98,7 +98,7 @@ function initializeCodeByte(api) {
         const editorValue = this.get('value');
         let matchIndex = -1;
         const newValue = editorValue.replace(
-          /\[codebyte( language=(.*))?]\n?(.*)?\n?\[\/codebyte]/g,
+          /\[codebyte( language=(.*))?]\n?(.*)?\n?\[\/codebyte]/gs,
           (match) => {
             matchIndex++;
             return matchIndex === index
