@@ -5,6 +5,7 @@
 # version: 0.1
 # authors: Codecademy
 # url: https://github.com/codecademy/discourse-codebytes-plugin
+# transpile_js: true
 
 register_asset 'stylesheets/common/code-bytes.scss'
 
