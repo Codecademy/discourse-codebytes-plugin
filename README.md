@@ -23,7 +23,7 @@ That's it!
 3. You can type your code in the CodeByte editor itself. This allows you to execute your code as you go along, as well as take advantage of features such as autocomplete and syntax highlighting. The code will be auto-saved to markdown after a few seconds of inactivity. You can also click the "Save to post" button to manually save the contents of the CodeByte to markdown. ![Screen Shot 2021-04-21 at 7 11 01 PM](https://user-images.githubusercontent.com/4821431/115632251-52740100-a2d5-11eb-996b-383fc4adfb2c.png)
 #### Using markdown
 1. If you prefer not to use the editor in the preview pane, you can use markdown directly to create a CodeByte using the [codebyte] tag.
-2. Add a `language` attribute to the opening tag, e.g. [codebyte language=python]. Currently, javascript, python, and ruby are supported.
+2. Add a `language` attribute to the opening tag, e.g. [codebyte language=python]. The currently supported options are `cpp` (C++), `csharp`, `golang`, `javascript`, `php`, `python`, `ruby`.
 3. Type your code in between the opening and closing tags.
 4. The opening and closing tags must each be be on their own line with no other text,
 
