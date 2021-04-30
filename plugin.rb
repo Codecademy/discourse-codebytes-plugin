@@ -3,8 +3,8 @@
 # name: CodeBytes
 # about: Adds executable code blocks
 # version: 0.1
-# authors: dougyd92
-# url: https://github.com/codecademy-engineering/discourse-codebytes-plugin
+# authors: Codecademy
+# url: https://github.com/codecademy/discourse-codebytes-plugin
 
 register_asset 'stylesheets/common/code-bytes.scss'
 
@@ -13,11 +13,3 @@ extend_content_security_policy(
 )
 
 enabled_site_setting :code_bytes_enabled
-
-PLUGIN_NAME ||= 'CodeByte'
-
-load File.expand_path('lib/code-bytes/engine.rb', __dir__)
-
-after_initialize do
-  # https://github.com/discourse/discourse/blob/master/lib/plugin/instance.rb
-end
