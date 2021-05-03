@@ -1,9 +1,50 @@
 import { acceptance, queryAll } from "discourse/tests/helpers/qunit-helpers";
-import { settled } from "@ember/test-helpers";
 
 acceptance("CodeBytes", function (needs) {
   needs.user();
   needs.settings({ code_bytes_enabled: true });
+
+  test("it inserts a codebyte when the Create a Codebyte composer toolbar button is clicked", async function (assert) {
+    await visit("/");
+    await click("#create-topic");
+    
+    await click(".d-editor button.codecademy-codebyte-discourse-btn");
+    assert.equal(
+      queryAll(".d-editor-input").val(),
+      '[codebyte]\n\n[/codebyte]\n',
+      "it inserts a blank codebyte when no text is selected"
+    );
+
+    await fillIn(
+      ".d-editor-input",
+      'print("Hello, world!")'
+    );
+    const textarea = queryAll(".d-editor-input")[0];
+    textarea.selectionStart = 0;
+    textarea.selectionEnd = textarea.value.length;
+    await click(".d-editor button.codecademy-codebyte-discourse-btn");
+    assert.equal(
+      queryAll(".d-editor-input").val(),
+      '[codebyte]\nprint("Hello, world!")\n[/codebyte]\n',
+      "it wraps selected text in a [codebyte] tag"
+    );
+  });
+
+  test("it renders an iframe in the preview area", async function (assert) {
+    await visit("/");
+    await click("#create-topic");
+    
+    await fillIn(
+      ".d-editor-input",
+      '[codebyte]\n\n[/codebyte]'
+    );
+
+    assert.equal(
+      queryAll(".d-editor-preview .d-codebyte iframe").attr('src'),
+      "https://www.codecademy.com/codebyte-editor?lang=&text=",
+      "it renders an iframe pointing to the codebyte editor on codecademy.com"
+    );
+  });
 
   test("it updates the markdown when the iframe sends a save response message", async function (assert) {
     await visit("/");
