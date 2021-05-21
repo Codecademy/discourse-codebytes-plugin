@@ -126,6 +126,7 @@ function initializeCodeByte(api) {
         height: '400px',
         width: '100%',
         maxWidth: '712px',
+        marginBottom: '24px',
         border: 0,
       });
 
@@ -146,7 +147,7 @@ function initializeCodeByte(api) {
         const saveButton = document.createElement('button');
         saveButton.className = 'btn-primary';
         saveButton.textContent = 'Save to post';
-        saveButton.style.marginTop = '24px';
+        saveButton.style.marginBottom = '24px';
         saveButton.onclick = () =>
           codebyteFrame.contentWindow.postMessage(
             { codeByteSaveRequest: true },
