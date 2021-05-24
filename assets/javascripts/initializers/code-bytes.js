@@ -1,6 +1,29 @@
 import { withPluginApi } from 'discourse/lib/plugin-api';
 import loadScript from 'discourse/lib/load-script';
 
+export function findCodeByte(lines = [], index) {
+  const startTagLines = [];
+  const range = [];
+  let matchIndex = -1;
+
+  lines.some((line, lineNumber) => {
+    if (line.match(/^\[codebyte( language=([^\s]*?))?]$/)) {
+      startTagLines.push(lineNumber);
+    } else if (line.match(/^\[\/codebyte]$/) && startTagLines.length) {
+      const start = startTagLines.pop();
+      if (startTagLines.length === 0) {
+        matchIndex++
+      }
+      if (matchIndex === index) {
+        range.push(start, lineNumber);
+        return true; // break
+      }
+    }
+  });
+
+  return range;
+}
+
 function initializeCodeByte(api) {
   api.onToolbarCreate((toolbar) => {
     toolbar.groups.lastObject.lastGroup = false;
@@ -95,18 +118,14 @@ function initializeCodeByte(api) {
         }
       },
       updateCodeByte(index, { text, language }) {
-        const editorValue = this.get('value');
-        let matchIndex = -1;
-        const newValue = editorValue.replace(
-          /\[codebyte( language=(.*))?]\n?(.*)?\n?\[\/codebyte]/gs,
-          (match) => {
-            matchIndex++;
-            return matchIndex === index
-              ? `[codebyte language=${language}]\n${text}\n[/codebyte]`
-              : match;
-          }
-        );
-        this.set('value', newValue);
+        const lines = this.get('value').split('\n');
+        const [start, end] = findCodeByte(lines, index);
+
+        if (start !== undefined && end !== undefined) {
+          const replacementLines = [`[codebyte language=${language}]`, ...text.split('\n')];
+          lines.splice(start, end - start, ...replacementLines);
+        }
+        this.set('value', lines.join('\n'));
       },
     },
   });
