@@ -46,6 +46,13 @@ That's it!
    You should now be able to run Discourse at http://localhost:3000/. Log-in with your admin account.
 5. Create a new post. You should see the "Create a Codebyte" button in the editor toolbar.
 
+### Testing
+Acceptance tests are run by qunit from the discourse root and are located in `test/javascripts/acceptance`. Because discourse does not support unit testing for plugins, we have a separate suite of jest tests located in `test/javascripts/unit`. In order for these tests to coexist the naming conventions are slightly different:
+- for unit tests: `*.test.js`
+- for acceptance tests: `*-test.js`
+
+unit tests can be run via `yarn test`. The easiest way to run acceptance tests is to run the discourse server and go to http://localhost:3000/qunit?module=Acceptance%3A%20CodeBytes in your web browser
+
 ### Further Resources
 - [Beginner's Guide to Creating Discourse Plugins](https://meta.discourse.org/t/beginners-guide-to-creating-discourse-plugins-part-1/30515)
 

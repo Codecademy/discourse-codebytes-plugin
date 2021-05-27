@@ -1,4 +1,4 @@
-import { findCodeByte } from './code-bytes';
+import { findCodeByte } from '../../../assets/javascripts/initializers/code-bytes';
 
 jest.mock('discourse/lib/plugin-api', () => {}, { virtual: true });
 jest.mock('discourse/lib/load-script', () => {}, { virtual: true });
