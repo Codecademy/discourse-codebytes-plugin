@@ -2,6 +2,7 @@ import { findCodeByte } from '../../../assets/javascripts/initializers/code-byte
 
 jest.mock('discourse/lib/plugin-api', () => {}, { virtual: true });
 jest.mock('discourse/lib/load-script', () => {}, { virtual: true });
+jest.mock('discourse/lib/show-modal', () => {}, { virtual: true });
 
 describe('findCodeByte', () => {
   it('finds empty codebytes at a given index', () => {
@@ -92,8 +93,6 @@ describe('findCodeByte', () => {
 
   it('ignores codebytes with non-language attributes', () => {
     const testString = [
-      '[codebyte ]',
-      '[/codebyte]',
       '[codebyte lang=javascript]',
       '[/codebyte]',
       '[codebyte lang=javascript language=javascript]',
