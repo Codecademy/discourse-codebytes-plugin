@@ -1,5 +1,8 @@
 en:
   js:
-    code_bytes:
     composer:
       codebyte: "Create a Codebyte"
+    modal:
+      title: "Please select a language"
+      content: "Your post includes one or more Codebytes that are missing the language attribute."
+      button: "Ok"
