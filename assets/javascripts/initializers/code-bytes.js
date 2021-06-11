@@ -196,7 +196,8 @@ function initializeCodeByte(api) {
 
       if (!allCodebytesAreValid) {
         const warningModal = showModal("invalidCodebyteModal", {
-          model: this.model
+          model: this.model,
+          modalClass: "codebytes-invalid-modal"
         });
         warningModal.actions.goBackAndFix = () =>
           this.send("closeModal");

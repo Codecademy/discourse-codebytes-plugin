@@ -1,9 +1,10 @@
 {{#d-modal-body title="modal.title"}}
   <div>{{i18n "modal.content"}}</div>
-  <div class="action-buttons">
+  <div>
     {{d-button
       action=(action "goBackAndFix")
       label="modal.button"
+      class="btn-primary"
     }}
   </div>
 {{/d-modal-body}}
