@@ -12,7 +12,7 @@ export function findCodeByte(lines = [], index) {
   let matchIndex = -1;
 
   lines.some((line, lineNumber) => {
-    if (line.match(CODEBYTE_OPEN_REGEX)) {
+    if (line.match(CODEBYTE_OPEN_TAG_REGEX)) {
       startTagLines.push(lineNumber);
     } else if (line.match(CODEBYTE_CLOSE_TAG_REGEX) && startTagLines.length) {
       const start = startTagLines.pop();
