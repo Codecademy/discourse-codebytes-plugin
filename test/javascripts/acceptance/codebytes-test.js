@@ -1,4 +1,9 @@
-import { acceptance, queryAll } from "discourse/tests/helpers/qunit-helpers";
+import { 
+  acceptance, 
+  exists, 
+  queryAll,
+  visible 
+} from "discourse/tests/helpers/qunit-helpers";
 
 acceptance("CodeBytes", function (needs) {
   needs.user();
@@ -85,4 +90,40 @@ acceptance("CodeBytes", function (needs) {
       "it updates the text for a codebyte that has many lines of text"
     );
   });
+
+  test("it prevents saving if a codebyte is missing the language attribute", async function (assert) {
+    await visit("/");
+    await click("#create-topic");
+    
+    await fillIn(
+      ".d-editor-input",
+      '[codebyte]\n\n[/codebyte]'
+    );
+    await click("#reply-control button.create");
+    assert.ok(exists(".codebytes-invalid-modal"), "it shows a modal to prevent save for newly created codebyte");
+    await click(".codebytes-invalid-modal .btn-primary");
+    assert.ok(!visible(".codebytes-invalid-modal"), "the modal can be closed");
+
+    await fillIn(
+      ".d-editor-input",
+      '[codebyte language=python]\nprint(hello)\n[/codebyte]\nfiller text\n[codebyte]\n\n[/codebyte]\n'
+    );
+    await click("#reply-control button.create");
+    assert.ok(exists(".codebytes-invalid-modal"), "it shows a modal to prevent save when there is one valid and one invalid codebyte");
+    await click(".codebytes-invalid-modal .btn-primary");
+
+    await fillIn("#reply-title", "CodeBytes Test Post");
+    await fillIn(
+      ".d-editor-input",
+      '[codebyte language=python]\nprint(hello)\n[/codebyte]'
+    );
+    await click("#reply-control button.create");
+    assert.ok(!visible(".codebytes-invalid-modal"), "the modal is not shown if the codebyte is valid");
+
+    assert.equal(
+      currentURL(),
+      "/t/internationalization-localization/280",
+      "it successfully creates the post if the codebyte is valid"
+    );
+  });  
 });

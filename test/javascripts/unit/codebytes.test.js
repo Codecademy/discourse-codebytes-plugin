@@ -2,6 +2,7 @@ import { findCodeByte } from '../../../assets/javascripts/initializers/code-byte
 
 jest.mock('discourse/lib/plugin-api', () => {}, { virtual: true });
 jest.mock('discourse/lib/load-script', () => {}, { virtual: true });
+jest.mock('discourse/lib/show-modal', () => {}, { virtual: true });
 
 describe('findCodeByte', () => {
   it('finds empty codebytes at a given index', () => {
@@ -90,15 +91,11 @@ describe('findCodeByte', () => {
     expect(findCodeByte(testString, 1)).toEqual([]);
   });
 
-  it('ignores codebytes with non-language attributes', () => {
+  it('ignores codebytes with an open tag spread across multiple lines', () => {
     const testString = [
-      '[codebyte ]',
-      '[/codebyte]',
-      '[codebyte lang=javascript]',
-      '[/codebyte]',
-      '[codebyte lang=javascript language=javascript]',
-      '[/codebyte]',
-      '[codebyte language=javascript lang=javascript]',
+      '[codebyte ',
+      'language=javascript]',
+      'console.log()',
       '[/codebyte]',
     ];
 
