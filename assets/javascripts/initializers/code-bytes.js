@@ -2,7 +2,7 @@ import loadScript from 'discourse/lib/load-script';
 import { withPluginApi } from 'discourse/lib/plugin-api';
 import showModal from "discourse/lib/show-modal";
 
-export const CODEBYTE_OPEN_TAG_REGEX = /^\[codebyte([ ]+language=([^\s]*?))?[ ]*]$/
+export const CODEBYTE_OPEN_TAG_REGEX = /^\[codebyte.*]$/
 export const CODEBYTE_OPEN_TAG_WITH_LANG_REGEX = /^\[codebyte[ ]+language=([^\s]+?)[ ]*]$/
 export const CODEBYTE_CLOSE_TAG_REGEX = /^\[\/codebyte]$/
 

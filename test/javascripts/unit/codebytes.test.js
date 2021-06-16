@@ -91,13 +91,11 @@ describe('findCodeByte', () => {
     expect(findCodeByte(testString, 1)).toEqual([]);
   });
 
-  it('ignores codebytes with non-language attributes', () => {
+  it('ignores codebytes with an open tag spread across multiple lines', () => {
     const testString = [
-      '[codebyte lang=javascript]',
-      '[/codebyte]',
-      '[codebyte lang=javascript language=javascript]',
-      '[/codebyte]',
-      '[codebyte language=javascript lang=javascript]',
+      '[codebyte ',
+      'language=javascript]',
+      'console.log()',
       '[/codebyte]',
     ];
 
