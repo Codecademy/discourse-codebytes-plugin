@@ -2,15 +2,19 @@ import loadScript from 'discourse/lib/load-script';
 import { withPluginApi } from 'discourse/lib/plugin-api';
 import showModal from "discourse/lib/show-modal";
 
+export const CODEBYTE_OPEN_TAG_REGEX = /^\[codebyte([ ]+language=([^\s]*?))?[ ]*]$/
+export const CODEBYTE_OPEN_TAG_WITH_LANG_REGEX = /^\[codebyte[ ]+language=([^\s]*?)[ ]*]$/
+export const CODEBYTE_CLOSE_TAG_REGEX = /^\[\/codebyte]$/
+
 export function findCodeByte(lines = [], index) {
   const startTagLines = [];
   const range = [];
   let matchIndex = -1;
 
   lines.some((line, lineNumber) => {
-    if (line.match(/^\[codebyte([ ]+language=([^\s]*?))?[ ]*]$/)) {
+    if (line.match(CODEBYTE_OPEN_REGEX)) {
       startTagLines.push(lineNumber);
-    } else if (line.match(/^\[\/codebyte]$/) && startTagLines.length) {
+    } else if (line.match(CODEBYTE_CLOSE_TAG_REGEX) && startTagLines.length) {
       const start = startTagLines.pop();
       if (startTagLines.length === 0) {
         matchIndex++
@@ -189,7 +193,7 @@ function initializeCodeByte(api) {
       do {
         [start, end] = findCodeByte(inputLines, index);
         index++;
-        if (start !== undefined && !inputLines[start].match(/^\[codebyte[ ]+language=([^\s]*?)[ ]*]$/)) {
+        if (start !== undefined && !inputLines[start].match(CODEBYTE_OPEN_TAG_WITH_LANG_REGEX)) {
           allCodebytesAreValid = false;
         }
       } while (allCodebytesAreValid && start !== undefined)
