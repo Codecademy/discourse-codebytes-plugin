@@ -135,15 +135,19 @@ function initializeCodeByte(api) {
     },
   });
 
-  function renderCodebyteFrame(language = '', text = '') {
+  function renderCodebyteFrame(language = '', text = '', isPreview = false) {
     return loadScript(
       'https://cdn.jsdelivr.net/npm/js-base64@3.6.0/base64.min.js'
     ).then(() => {
       const frame = document.createElement('iframe');
-
-      const encodedURI = Base64.encodeURI(text);
       frame.allow = 'clipboard-write';
-      frame.src = `https://www.codecademy.com/codebyte-editor?lang=${language}&text=${encodedURI}`;
+
+      const params = [];
+      params.push(`lang=${language}`);
+      params.push(`text=${Base64.encodeURI(text)}`);
+      params.push(`mode=${isPreview ? 'compose' : 'view'}`);
+
+      frame.src = `https://www.codecademy.com/codebyte-editor?${params.join('&')}`;
 
       Object.assign(frame.style, {
         display: 'block',
@@ -159,15 +163,17 @@ function initializeCodeByte(api) {
   }
 
   api.decorateCookedElement((elem) => {
+    const isPreview = elem.classList.contains('d-editor-preview');
     elem.querySelectorAll('div.d-codebyte').forEach(async (div, index) => {
       const codebyteFrame = await renderCodebyteFrame(
         div.dataset.language,
-        div.textContent.trim()
+        div.textContent.trim(),
+        isPreview
       );
       div.innerHTML = '';
       div.appendChild(codebyteFrame);
 
-      if (elem.classList.contains('d-editor-preview')) {
+      if (isPreview) {
         const saveButton = document.createElement('button');
         saveButton.className = 'btn-primary';
         saveButton.textContent = 'Save to post';
