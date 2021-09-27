@@ -163,16 +163,17 @@ function initializeCodeByte(api) {
   }
 
   api.decorateCookedElement((elem) => {
+    const isPreview = elem.classList.contains('d-editor-preview');
     elem.querySelectorAll('div.d-codebyte').forEach(async (div, index) => {
       const codebyteFrame = await renderCodebyteFrame(
         div.dataset.language,
         div.textContent.trim(),
-        elem.classList.contains('d-editor-preview')
+        isPreview
       );
       div.innerHTML = '';
       div.appendChild(codebyteFrame);
 
-      if (elem.classList.contains('d-editor-preview')) {
+      if (isPreview) {
         const saveButton = document.createElement('button');
         saveButton.className = 'btn-primary';
         saveButton.textContent = 'Save to post';
