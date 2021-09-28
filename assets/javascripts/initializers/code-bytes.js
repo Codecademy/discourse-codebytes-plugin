@@ -145,7 +145,12 @@ function initializeCodeByte(api) {
       const params = [];
       params.push(`lang=${language}`);
       params.push(`text=${Base64.encodeURI(text)}`);
-      params.push(`mode=${isPreview ? 'compose' : 'view'}`);
+
+      params.push(`client_name=forum`);
+      params.push(`page=${document.location.href}`);
+      if (isPreview) {
+        params.push(`mode=compose`);
+      }
 
       frame.src = `https://www.codecademy.com/codebyte-editor?${params.join('&')}`;
 
