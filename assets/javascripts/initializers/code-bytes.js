@@ -146,7 +146,7 @@ function initializeCodeByte(api) {
       params.push(`lang=${language}`);
       params.push(`text=${Base64.encodeURI(text)}`);
 
-      params.push(`client_name=forum`);
+      params.push(`client-name=forum`);
       params.push(`page=${document.location.href}`);
       if (isPreview) {
         params.push(`mode=compose`);
