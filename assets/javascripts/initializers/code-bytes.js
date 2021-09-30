@@ -135,7 +135,7 @@ function initializeCodeByte(api) {
     },
   });
 
-  function renderCodebyteFrame(language = '', text = '', isPreview = false) {
+  function renderCodebyteFrame(language = '', text = '', isPreview = false, postUrl = '') {
     return loadScript(
       'https://cdn.jsdelivr.net/npm/js-base64@3.6.0/base64.min.js'
     ).then(() => {
@@ -147,7 +147,7 @@ function initializeCodeByte(api) {
       params.push(`text=${Base64.encodeURI(text)}`);
 
       params.push(`client-name=forum`);
-      params.push(`page=${document.location.href}`);
+      params.push(`page=${Base64.encodeURI(postUrl)}`);
       if (isPreview) {
         params.push(`mode=compose`);
       }
@@ -167,13 +167,15 @@ function initializeCodeByte(api) {
     });
   }
 
-  api.decorateCookedElement((elem) => {
+  api.decorateCookedElement((elem, decoratorHelper) => {
+    debugger;
     const isPreview = elem.classList.contains('d-editor-preview');
     elem.querySelectorAll('div.d-codebyte').forEach(async (div, index) => {
       const codebyteFrame = await renderCodebyteFrame(
         div.dataset.language,
         div.textContent.trim(),
-        isPreview
+        isPreview,
+        decoratorHelper ? decoratorHelper.getModel().urlWithNumber : document.location.href
       );
       div.innerHTML = '';
       div.appendChild(codebyteFrame);
