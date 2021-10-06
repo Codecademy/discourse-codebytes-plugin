@@ -147,8 +147,7 @@ function initializeCodeByte(api) {
       params.push(`text=${Base64.encodeURI(text)}`);
 
       params.push(`client-name=forum`);
-      const page = encodeURIComponent(`${document.location.origin}${postUrl}`);
-      params.push(`page=${page}`);
+      params.push(`page=${encodeURIComponent(postUrl)}`);
       if (isPreview) {
         params.push(`mode=compose`);
       }
@@ -169,14 +168,16 @@ function initializeCodeByte(api) {
   }
 
   api.decorateCookedElement((elem, decoratorHelper) => {
-    debugger;
     const isPreview = elem.classList.contains('d-editor-preview');
+    const postUrl = decoratorHelper
+      ? `${document.location.origin}${decoratorHelper.getModel().urlWithNumber}`
+      : document.location.href;
     elem.querySelectorAll('div.d-codebyte').forEach(async (div, index) => {
       const codebyteFrame = await renderCodebyteFrame(
         div.dataset.language,
         div.textContent.trim(),
         isPreview,
-        decoratorHelper ? decoratorHelper.getModel().urlWithNumber : document.location.href
+        postUrl
       );
       div.innerHTML = '';
       div.appendChild(codebyteFrame);
