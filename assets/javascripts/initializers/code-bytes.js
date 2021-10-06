@@ -147,7 +147,8 @@ function initializeCodeByte(api) {
       params.push(`text=${Base64.encodeURI(text)}`);
 
       params.push(`client-name=forum`);
-      params.push(`page=${Base64.encodeURI(postUrl)}`);
+      const page = encodeURIComponent(`${document.location.origin}${postUrl}`);
+      params.push(`page=${page}`);
       if (isPreview) {
         params.push(`mode=compose`);
       }
