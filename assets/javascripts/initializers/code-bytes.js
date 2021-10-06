@@ -135,7 +135,7 @@ function initializeCodeByte(api) {
     },
   });
 
-  function renderCodebyteFrame(language = '', text = '', isPreview = false) {
+  function renderCodebyteFrame(language = '', text = '', isPreview = false, postUrl = '') {
     return loadScript(
       'https://cdn.jsdelivr.net/npm/js-base64@3.6.0/base64.min.js'
     ).then(() => {
@@ -145,7 +145,12 @@ function initializeCodeByte(api) {
       const params = [];
       params.push(`lang=${language}`);
       params.push(`text=${Base64.encodeURI(text)}`);
-      params.push(`mode=${isPreview ? 'compose' : 'view'}`);
+
+      params.push(`client-name=forum`);
+      params.push(`page=${encodeURIComponent(postUrl)}`);
+      if (isPreview) {
+        params.push(`mode=compose`);
+      }
 
       frame.src = `https://www.codecademy.com/codebyte-editor?${params.join('&')}`;
 
@@ -162,13 +167,17 @@ function initializeCodeByte(api) {
     });
   }
 
-  api.decorateCookedElement((elem) => {
+  api.decorateCookedElement((elem, decoratorHelper) => {
     const isPreview = elem.classList.contains('d-editor-preview');
+    const postUrl = decoratorHelper
+      ? `${document.location.origin}${decoratorHelper.getModel().urlWithNumber}`
+      : document.location.href;
     elem.querySelectorAll('div.d-codebyte').forEach(async (div, index) => {
       const codebyteFrame = await renderCodebyteFrame(
         div.dataset.language,
         div.textContent.trim(),
-        isPreview
+        isPreview,
+        postUrl
       );
       div.innerHTML = '';
       div.appendChild(codebyteFrame);
