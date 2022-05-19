@@ -44,9 +44,8 @@ acceptance("CodeBytes", function (needs) {
       '[codebyte]\n\n[/codebyte]'
     );
 
-    assert.equal(
-      queryAll(".d-editor-preview .d-codebyte iframe").attr('src'),
-      "https://www.codecademy.com/codebyte-editor?lang=&text=",
+    assert.ok(
+      queryAll(".d-editor-preview .d-codebyte iframe").attr('src').startsWith("https://www.codecademy.com/codebyte-editor"),
       "it renders an iframe pointing to the codebyte editor on codecademy.com"
     );
   });
