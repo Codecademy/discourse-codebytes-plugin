@@ -56,7 +56,7 @@ function initializeCodeByte(api) {
       this.onSaveResponse = (message) => {
         if (message.data.codeByteSaveResponse) {
           const editableCodebytes = Array.from(
-            this.element.querySelectorAll(
+            this.element?.querySelectorAll(
               '.d-editor-preview .d-codebyte iframe'
             )
           ).map((frame) => frame.contentWindow);
