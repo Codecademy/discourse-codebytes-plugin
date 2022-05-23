@@ -4,6 +4,8 @@ import {
   queryAll,
   visible 
 } from "discourse/tests/helpers/qunit-helpers";
+import { test } from "qunit";
+import { click, currentURL, fillIn, triggerEvent, visit } from "@ember/test-helpers";
 
 acceptance("CodeBytes", function (needs) {
   needs.user();
