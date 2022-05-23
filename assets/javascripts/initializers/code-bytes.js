@@ -55,13 +55,19 @@ function initializeCodeByte(api) {
 
       this.onSaveResponse = (message) => {
         if (message.data.codeByteSaveResponse) {
-          const editableCodebytes = Array.from(
-            this.element?.querySelectorAll(
-              '.d-editor-preview .d-codebyte iframe'
-            )
+          const editableCodebyteFrames = this.element?.querySelectorAll(
+            '.d-editor-preview .d-codebyte iframe'
+          );
+
+          if (!editableCodebyteFrames) {
+            return;
+          }
+
+          const codebyteWindows = Array.from(
+            editableCodebyteFrames
           ).map((frame) => frame.contentWindow);
 
-          const index = editableCodebytes.indexOf(message.source);
+          const index = codebyteWindows.indexOf(message.source);
           if (index >= 0) {
             this.send(
               'updateCodeByte',
