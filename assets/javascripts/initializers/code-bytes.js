@@ -55,13 +55,19 @@ function initializeCodeByte(api) {
 
       this.onSaveResponse = (message) => {
         if (message.data.codeByteSaveResponse) {
-          const editableCodebytes = Array.from(
-            this.element.querySelectorAll(
-              '.d-editor-preview .d-codebyte iframe'
-            )
+          const editableCodebyteFrames = this.element?.querySelectorAll(
+            '.d-editor-preview .d-codebyte iframe'
+          );
+
+          if (!editableCodebyteFrames) {
+            return;
+          }
+
+          const codebyteWindows = Array.from(
+            editableCodebyteFrames
           ).map((frame) => frame.contentWindow);
 
-          const index = editableCodebytes.indexOf(message.source);
+          const index = codebyteWindows.indexOf(message.source);
           if (index >= 0) {
             this.send(
               'updateCodeByte',
@@ -86,8 +92,8 @@ function initializeCodeByte(api) {
         let startTag = '[codebyte]\n';
         let endTag = '\n[/codebyte]';
 
-        const lineValueSelection = this._getSelected('', { lineVal: true });
-        const selection = this._getSelected();
+        const lineValueSelection = this.getSelected('', { lineVal: true });
+        const selection = this.getSelected();
         const addBlockInSameline = lineValueSelection.lineVal.length === 0;
         const isTextSelected = selection.value.length > 0;
         const isWholeLineSelected =
@@ -119,7 +125,7 @@ function initializeCodeByte(api) {
           if (!newLineAfterSelection) {
             exampleFormat = exampleFormat + '\n';
           }
-          this._insertText(exampleFormat);
+          this.insertText(exampleFormat);
         }
       },
       updateCodeByte(index, { text, language }) {
