@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-# name: CodeBytes
+# name: discourse-codebytes-plugin
 # about: Adds executable code blocks
 # version: 0.1
 # authors: Codecademy
